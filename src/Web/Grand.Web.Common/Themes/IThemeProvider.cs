@@ -1,4 +1,4 @@
-﻿using Grand.Infrastructure.Plugins;
+﻿using Grand.Infrastructure.Themes;
 
 namespace Grand.Web.Common.Themes
 {

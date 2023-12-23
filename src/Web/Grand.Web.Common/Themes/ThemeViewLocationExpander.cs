@@ -19,8 +19,8 @@ namespace Grand.Web.Common.Themes
             if (string.IsNullOrEmpty(context.AreaName) && context.Values.TryGetValue(ThemeKey, out var theme))
             {
                 viewLocations = new[] {
-                        $"/Themes/{theme}/Views/{{1}}/{{0}}.cshtml",
-                        $"/Themes/{theme}/Views/Shared/{{0}}.cshtml"
+                        $"/Views/{theme}/{{1}}/{{0}}.cshtml",
+                        $"/Views/{theme}/Shared/{{0}}.cshtml"
                     }
                     .Concat(viewLocations);
             }

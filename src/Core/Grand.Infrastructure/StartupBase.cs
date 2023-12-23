@@ -6,6 +6,7 @@ using Grand.Infrastructure.Extensions;
 using Grand.Infrastructure.Mapper;
 using Grand.Infrastructure.Plugins;
 using Grand.Infrastructure.Roslyn;
+using Grand.Infrastructure.Themes;
 using Grand.Infrastructure.TypeConverters;
 using Grand.Infrastructure.TypeSearch;
 using Grand.Infrastructure.Validators;
@@ -137,6 +138,9 @@ namespace Grand.Infrastructure
         {
             //Load plugins
             PluginManager.Load(mvcCoreBuilder, configuration);
+
+            //Load themes
+            ThemeManager.Load(mvcCoreBuilder, configuration);
 
             //Load CTX scripts
             RoslynCompiler.Load(mvcCoreBuilder.PartManager, configuration);

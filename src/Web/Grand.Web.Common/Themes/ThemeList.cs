@@ -1,4 +1,5 @@
-﻿using Grand.SharedKernel.Extensions;
+﻿using Grand.Infrastructure.Themes;
+using Grand.SharedKernel.Extensions;
 using Newtonsoft.Json;
 
 namespace Grand.Web.Common.Themes
@@ -8,29 +9,28 @@ namespace Grand.Web.Common.Themes
         public ThemeList()
         {
             ThemeConfigurations = new List<ThemeConfiguration>();
-            if (!Directory.Exists(CommonPath.ThemePath)) return;
-            foreach (var themeName in Directory.GetDirectories(CommonPath.ThemePath))
+            ThemeManager.ReferencedThemes.ToList().ForEach(theme =>
             {
-                var configuration = CreateThemeConfiguration(themeName);
+                var configuration = CreateThemeConfiguration(theme);
                 if (configuration != null)
                 {
                     ThemeConfigurations.Add(configuration);
                 }
-            }
+            });
         }
 
         public IList<ThemeConfiguration> ThemeConfigurations { get; }
 
-        private static ThemeConfiguration CreateThemeConfiguration(string themePath)
+        private static ThemeConfiguration CreateThemeConfiguration(ThemeInfo theme)
         {
-            var themeDirectory = new DirectoryInfo(themePath);
-            var themeConfigFile = new FileInfo(Path.Combine(themeDirectory.FullName, "theme.cfg"));
-
-            if (!themeConfigFile.Exists) return null;
-            var themeConfiguration = JsonConvert.DeserializeObject<ThemeConfiguration>(File.ReadAllText(themeConfigFile.FullName));
-            if (themeConfiguration == null) return null;
-            themeConfiguration.Name = themeDirectory.Name;
-            return themeConfiguration;
+            return new ThemeConfiguration {
+                Name = theme.SystemName,
+                Title = theme.FriendlyName,
+                PreviewText = theme.PreviewText,
+                SupportRtl = theme.SupportRtl,
+                Version = theme.Version,
+                PreviewImageUrl = theme.PreviewImageUrl
+            };
         }
 
     }

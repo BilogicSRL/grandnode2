@@ -120,6 +120,14 @@
                 return Path.Combine(BaseDirectory, PluginsPath, "bin");
             }
         }
+        
+        public static string ThemesCopyPath
+        {
+            get
+            {
+                return Path.Combine(BaseDirectory, ThemePath, "bin");
+            }
+        }
         /// <summary>
         /// Maps a temp upload path to a physical disk path.
         /// </summary>

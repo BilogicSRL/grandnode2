@@ -1,4 +1,4 @@
-﻿using Grand.Infrastructure.Plugins;
+﻿using Grand.Infrastructure.Themes;
 using Grand.SharedKernel.Extensions;
 using Newtonsoft.Json;
 
@@ -30,7 +30,7 @@ namespace Grand.Web.Common.Themes
 
         public IList<ThemeConfiguration> GetConfigurations()
         {
-            return string.IsNullOrEmpty(CommonPath.Param) ? _themeList.ThemeConfigurations : _themeList.ThemeConfigurations.Where(x => string.IsNullOrEmpty(x.Directory) || x.Directory == CommonPath.Param).ToList();
+            return _themeList.ThemeConfigurations;
         }
 
         public ThemeInfo GetThemeDescriptorFromText(string text)
