@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <Import Project="..\..\Build\Grand.Common.props" />
+    <PropertyGroup>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <EnableDefaultContentItems>false</EnableDefaultContentItems>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateStaticWebAssetsRuntimeManifest>false</GenerateStaticWebAssetsRuntimeManifest>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <OutputPath>..\..\Web\Grand.Web\Themes\Basic\</OutputPath>
+        <OutDir>$(OutputPath)</OutDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <OutputPath>..\..\Web\Grand.Web\Themes\Basic\</OutputPath>
+        <OutDir>$(OutputPath)</OutDir>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <RemoveDir Directories="..\..\Web\Grand.Web\Themes\Basic\refs" />
+        <RemoveDir Directories="..\..\Web\Grand.Web\Themes\Basic\ref" />
+    </Target>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\..\Business\Grand.Business.Core\Grand.Business.Core.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Core\Grand.Domain\Grand.Domain.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Core\Grand.Infrastructure\Grand.Infrastructure.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Core\Grand.SharedKernel\Grand.SharedKernel.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Web\Grand.Web.Common\Grand.Web.Common.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Web\Grand.Web.Models\Grand.Web.Models.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Views\**\*.cshtml" /> 
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="wwwroot\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>

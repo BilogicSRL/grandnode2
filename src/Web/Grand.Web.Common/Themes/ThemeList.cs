@@ -8,7 +8,7 @@ namespace Grand.Web.Common.Themes
     {
         public ThemeList()
         {
-            ThemeConfigurations = new List<ThemeConfiguration>();
+            ThemeConfigurations = new List<Theme>();
             ThemeManager.ReferencedThemes.ToList().ForEach(theme =>
             {
                 var configuration = CreateThemeConfiguration(theme);
@@ -19,16 +19,17 @@ namespace Grand.Web.Common.Themes
             });
         }
 
-        public IList<ThemeConfiguration> ThemeConfigurations { get; }
+        public IList<Theme> ThemeConfigurations { get; }
 
-        private static ThemeConfiguration CreateThemeConfiguration(ThemeInfo theme)
+        private static Theme CreateThemeConfiguration(ThemeInfo theme)
         {
-            return new ThemeConfiguration {
+            return new Theme {
                 Name = theme.SystemName,
                 Title = theme.FriendlyName,
                 PreviewText = theme.PreviewText,
                 SupportRtl = theme.SupportRtl,
                 Version = theme.Version,
+                Folder = theme.Folder,
                 PreviewImageUrl = theme.PreviewImageUrl
             };
         }

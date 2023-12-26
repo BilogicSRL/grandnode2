@@ -1,0 +1,28 @@
+﻿@inject StoreInformationSettings storeInformationSettings
+@inject IThemeProvider themeProvider
+@inject IThemeContext themeContext
+@{
+    if (storeInformationSettings.AllowCustomerToSelectTheme)
+    {
+        var availableThemes = themeProvider.GetConfigurations()
+                 .Select(x => new StoreThemeModel
+                 {
+                     Name = x.Name,
+                     Title = x.Title
+                 }).ToList();
+
+        var returnUrl = Context?.Request?.GetEncodedPathAndQuery();
+        if (availableThemes.Count > 1)
+        {
+            <b-dropdown class="mr-2" text="@availableThemes.FirstOrDefault(x => x.Name == themeContext.WorkingTheme.Name)?.Name">
+                @foreach (var theme in availableThemes)
+                {
+                    var className = theme.Name == themeContext.WorkingTheme.Name ? "active" : "";
+                    <b-dropdown-item class="@className" href="@Url.Action("SetStoreTheme", "Common", new { themename = theme.Name, returnUrl = returnUrl })">
+                        @theme.Name
+                    </b-dropdown-item>
+                }
+            </b-dropdown>
+        }
+    }
+}

@@ -10,7 +10,7 @@ namespace Grand.Web.Common.Themes
         /// <summary>
         /// Get current theme system name
         /// </summary>
-        string WorkingThemeName { get; }
+        Theme WorkingTheme { get; }
 
         /// <summary>
         /// Get admin area current theme name

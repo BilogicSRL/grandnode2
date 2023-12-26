@@ -18,8 +18,8 @@ namespace Grand.Web.Common.Themes
         private readonly VendorSettings _vendorSettings;
         private readonly IThemeProvider _themeProvider;
 
-        private bool _themeIsCached, _adminThemeIsCached;
-        private string _cachedThemeName, _cachedAdminThemeName;
+        private string _cachedAdminThemeName;
+        private Theme _cachedTheme;
 
         public ThemeContext(IWorkContext workContext,
             IUserFieldService userFieldService,
@@ -37,50 +37,39 @@ namespace Grand.Web.Common.Themes
         /// <summary>
         /// Get current theme system name
         /// </summary>
-        public string WorkingThemeName
-        {
-            get
-            {
-                if (_themeIsCached)
-                    return _cachedThemeName;
+        public Theme WorkingTheme {
+            get {
+                if (_cachedTheme != null)
+                    return _cachedTheme;
 
                 var theme = "";
                 if (_storeInformationSettings.AllowCustomerToSelectTheme)
                 {
                     if (_workContext.CurrentCustomer != null)
-                        theme = _workContext.CurrentCustomer.GetUserFieldFromEntity<string>(SystemCustomerFieldNames.WorkingThemeName, _workContext.CurrentStore.Id);
+                        theme = _workContext.CurrentCustomer.GetUserFieldFromEntity<string>(
+                            SystemCustomerFieldNames.WorkingThemeName, _workContext.CurrentStore.Id);
                 }
 
                 //default store theme
                 if (string.IsNullOrEmpty(theme))
                     theme = _storeInformationSettings.DefaultStoreTheme;
 
-                //ensure that theme exists
-                if (!_themeProvider.ThemeConfigurationExists(theme))
-                {
-                    var themeInstance = _themeProvider.GetConfigurations()
-                        .FirstOrDefault();
-                    if (themeInstance == null)
-                        throw new Exception("No theme could be loaded");
-                    theme = themeInstance.Name;
-                }
+                if (_themeProvider.ThemeConfigurationExists(theme, out _cachedTheme)) return _cachedTheme;
+                
+                var themeInstance = _themeProvider.GetConfigurations()
+                    .FirstOrDefault();
+                _cachedTheme = themeInstance ?? throw new Exception("No theme could be loaded");
 
-                //cache theme
-                _cachedThemeName = theme;
-                _adminThemeIsCached = true;
-                return theme;
+                return _cachedTheme;
             }
         }
 
         /// <summary>
         /// Get current theme system name
         /// </summary>
-        public string AdminAreaThemeName
-        {
-            get
-            {
-
-                if (_adminThemeIsCached)
+        public string AdminAreaThemeName {
+            get {
+                if (!string.IsNullOrEmpty(_cachedAdminThemeName))
                     return _cachedAdminThemeName;
 
                 var theme = "Default";
@@ -92,7 +81,9 @@ namespace Grand.Web.Common.Themes
                 {
                     if (_workContext.CurrentCustomer != null)
                     {
-                        var customerTheme = _workContext.CurrentCustomer.GetUserFieldFromEntity<string>(SystemCustomerFieldNames.AdminThemeName, _workContext.CurrentStore.Id);
+                        var customerTheme =
+                            _workContext.CurrentCustomer.GetUserFieldFromEntity<string>(
+                                SystemCustomerFieldNames.AdminThemeName, _workContext.CurrentStore.Id);
                         if (!string.IsNullOrEmpty(customerTheme))
                             theme = customerTheme;
                     }
@@ -106,7 +97,6 @@ namespace Grand.Web.Common.Themes
 
                 //cache theme
                 _cachedAdminThemeName = theme;
-                _themeIsCached = true;
                 return theme;
             }
         }
@@ -124,10 +114,9 @@ namespace Grand.Web.Common.Themes
             if (_workContext.CurrentCustomer == null)
                 return;
 
-            await _userFieldService.SaveField(_workContext.CurrentCustomer, SystemCustomerFieldNames.WorkingThemeName, themeName, _workContext.CurrentStore.Id);
-
-            //clear cache
-            _themeIsCached = false;
+            await _userFieldService.SaveField(_workContext.CurrentCustomer, SystemCustomerFieldNames.WorkingThemeName,
+                themeName, _workContext.CurrentStore.Id);
+            
         }
     }
 }

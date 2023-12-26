@@ -207,7 +207,7 @@ namespace Grand.Infrastructure
             services.AddHttpContextAccessor();
             //add AppConfig configuration parameters
             services.StartupConfig<AppConfig>(configuration.GetSection("Application"));
-            var performanceConfig = services.StartupConfig<PerformanceConfig>(configuration.GetSection("Performance"));
+            services.StartupConfig<PerformanceConfig>(configuration.GetSection("Performance"));
             services.StartupConfig<SecurityConfig>(configuration.GetSection("Security"));
             services.StartupConfig<ExtensionsConfig>(configuration.GetSection("Extensions"));
             services.StartupConfig<CacheConfig>(configuration.GetSection("Cache"));

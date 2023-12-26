@@ -23,12 +23,13 @@ namespace Grand.Web.Common.Themes
 
         #region Methods
 
-        public bool ThemeConfigurationExists(string themeName)
+        public bool ThemeConfigurationExists(string themeName, out Theme theme)
         {
-            return GetConfigurations().Any(configuration => configuration.Name.Equals(themeName, StringComparison.OrdinalIgnoreCase));
+            theme = GetConfigurations().FirstOrDefault(configuration => configuration.Name.Equals(themeName, StringComparison.OrdinalIgnoreCase));
+            return theme != null;
         }
 
-        public IList<ThemeConfiguration> GetConfigurations()
+        public IList<Theme> GetConfigurations()
         {
             return _themeList.ThemeConfigurations;
         }
@@ -38,7 +39,7 @@ namespace Grand.Web.Common.Themes
             var themeDescriptor = new ThemeInfo();
             try
             {
-                var themeConfiguration = JsonConvert.DeserializeObject<ThemeConfiguration>(text);
+                var themeConfiguration = JsonConvert.DeserializeObject<Theme>(text);
                 themeDescriptor.FriendlyName = themeConfiguration?.Title;
             }
             catch

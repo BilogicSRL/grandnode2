@@ -64,10 +64,12 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Themes\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="Themes\Basic\WebUI.BasicTheme.deps.json" />
-	  <_ContentIncludedByDefault Remove="Themes\Basic\WebUI.BasicTheme.staticwebassets.runtime.json" />
+		<Content Remove="Themes\**" />
+		<Compile Remove="Themes\**" />
+		<EmbeddedResource Remove="Themes\**" />
+		<None Remove="Themes\**" />
+		<Content Update="Themes\**">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 </Project>

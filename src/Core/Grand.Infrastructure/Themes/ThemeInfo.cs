@@ -41,6 +41,11 @@ namespace Grand.Infrastructure.Themes
         public string FriendlyName { get; set; }
 
         /// <summary>
+        /// Gets or sets the folder theme name
+        /// </summary>
+        public string Folder { get; set; }
+        
+        /// <summary>
         /// Gets or sets the author of theme
         /// </summary>
         public string Author { get; set; }

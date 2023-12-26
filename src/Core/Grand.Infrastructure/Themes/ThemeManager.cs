@@ -7,7 +7,6 @@ using Serilog;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
-using System.Text.RegularExpressions;
 
 namespace Grand.Infrastructure.Themes
 {
@@ -17,8 +16,6 @@ namespace Grand.Infrastructure.Themes
     public static class ThemeManager
     {
         #region Const
-
-        public const string CopyPath = "Themes/bin";
 
         private static object _synLock = new object();
 
@@ -150,26 +147,6 @@ namespace Grand.Infrastructure.Themes
                 ReferencedThemes = referencedThemes;
             }
         }
-       
-        /*public static PluginInfo FindPlugin(Type typeAssembly)
-        {
-            if (typeAssembly == null)
-                throw new ArgumentNullException(nameof(typeAssembly));
-
-            return ReferencedPlugins?.FirstOrDefault(plugin => plugin.ReferencedAssembly != null
-                                                               && plugin.ReferencedAssembly.FullName!.Equals(typeAssembly.GetTypeInfo().Assembly.FullName, StringComparison.OrdinalIgnoreCase));
-        }*/
-
-
-        /// <summary>
-        /// Clear plugins
-        /// </summary>
-        /*public static void ClearPlugins()
-        {
-            var filePath = CommonPath.InstalledPluginsFilePath;
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-        }*/
 
         #endregion
 
@@ -187,8 +164,7 @@ namespace Grand.Infrastructure.Themes
 
         private static ThemeInfo PrepareThemeInfo(FileInfo themeFile)
         {
-            var fileInfo = //_config.PluginShadowCopy ? ShadowCopyFile(themeFile, Directory.CreateDirectory(_copyFolder.FullName)) : 
-                themeFile;
+            var fileInfo = _config.PluginShadowCopy ? ShadowCopyFile(themeFile, Directory.CreateDirectory(_copyFolder.FullName)) : themeFile;
 
             Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(fileInfo.FullName);
 
@@ -209,6 +185,7 @@ namespace Grand.Infrastructure.Themes
                 PreviewText = themeInfo.PreviewText,
                 PreviewImageUrl = themeInfo.PreviewImageUrl,
                 SupportRtl = themeInfo.SupportRtl,
+                Folder = themeInfo.Folder,
                 OriginalAssemblyFile = themeFile,
                 ReferencedAssembly = assembly
             };
@@ -271,11 +248,6 @@ namespace Grand.Infrastructure.Themes
             }
 
             return shadowCopiedPlug;
-        }
-
-        private static bool Matches(string fullName, string pattern)
-        {
-            return Regex.IsMatch(fullName, pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
         }
 
         private static void AddApplicationPart(IMvcCoreBuilder mvcCoreBuilder,

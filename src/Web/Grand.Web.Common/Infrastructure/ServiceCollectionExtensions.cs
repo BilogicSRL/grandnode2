@@ -10,6 +10,7 @@ using Grand.Domain.Data;
 using Grand.Infrastructure;
 using Grand.Infrastructure.Configuration;
 using Grand.Infrastructure.Plugins;
+using Grand.Infrastructure.Themes;
 using Grand.Infrastructure.TypeSearch;
 using Grand.SharedKernel.Extensions;
 using Grand.Web.Common.Themes;
@@ -209,7 +210,7 @@ namespace Grand.Web.Common.Infrastructure
         {
             //add basic MVC feature
             var mvcBuilder = services.AddControllersWithViews();
-
+            
             //add view localization
             mvcBuilder.AddViewLocalization();
 

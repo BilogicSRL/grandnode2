@@ -4,5 +4,6 @@
     FriendlyName = "API theme",
     SystemName = "Api",
     Author = "grandnode team",
-    Version = "2.2.0"
+    Version = "2.2.0",
+    Folder = "Api"
 )]

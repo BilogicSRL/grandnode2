@@ -4,9 +4,9 @@ namespace Grand.Web.Common.Themes
 {
     public interface IThemeProvider
     {
-        bool ThemeConfigurationExists(string themeName);
+        bool ThemeConfigurationExists(string themeName, out Theme theme);
 
-        IList<ThemeConfiguration> GetConfigurations();
+        IList<Theme> GetConfigurations();
 
         ThemeInfo GetThemeDescriptorFromText(string text);
     }

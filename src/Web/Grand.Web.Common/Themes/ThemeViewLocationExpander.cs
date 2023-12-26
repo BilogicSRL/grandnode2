@@ -11,7 +11,7 @@ namespace Grand.Web.Common.Themes
             if (!string.IsNullOrEmpty(context.AreaName)) return;
             
             var themeContext = (IThemeContext)context.ActionContext.HttpContext.RequestServices.GetService(typeof(IThemeContext));
-            context.Values[ThemeKey] = themeContext?.WorkingThemeName;
+            context.Values[ThemeKey] = themeContext?.WorkingTheme.Folder;
         }
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)

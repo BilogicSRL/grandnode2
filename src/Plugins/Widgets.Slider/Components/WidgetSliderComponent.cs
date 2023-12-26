@@ -81,7 +81,7 @@ namespace Widgets.Slider.Components
             if (!model.Slide.Any())
                 return Content("");
 
-            return View(this.GetViewPath(), model);
+            return View(model);
         }
     }
 }

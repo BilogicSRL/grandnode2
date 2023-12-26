@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <Import Project="..\..\Build\Grand.Common.props" />
+    <PropertyGroup>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <OutputPath>..\..\Web\Grand.Web\Themes\Api\</OutputPath>
+        <OutDir>$(OutputPath)</OutDir>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <OutputPath>..\..\Web\Grand.Web\Themes\Api\</OutputPath>
+        <OutDir>$(OutputPath)</OutDir>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <RemoveDir Directories="..\..\Web\Grand.Web\Themes\Api\refs" />
+        <RemoveDir Directories="..\..\Web\Grand.Web\Themes\Api\ref" />
+    </Target>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\Grand.Infrastructure\Grand.Infrastructure.csproj">
+            <Private>false</Private>
+            <ExcludeAssets>all</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include="Views\**\*.cshtml" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Views\Api\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\Home\Index.cshtml" />
+    </ItemGroup>
+</Project>

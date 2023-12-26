@@ -9,7 +9,7 @@ namespace Grand.Web.Admin.Mapper
     {
         public ThemeConfigurationProfile()
         {
-            CreateMap<ThemeConfiguration, GeneralCommonSettingsModel.StoreInformationSettingsModel.ThemeConfigurationModel>()
+            CreateMap<Theme, GeneralCommonSettingsModel.StoreInformationSettingsModel.ThemeConfigurationModel>()
                  .ForMember(dest => dest.ThemeTitle, mo => mo.MapFrom(p => p.Title))
                  .ForMember(dest => dest.ThemeName, mo => mo.MapFrom(p => p.Name))
                  .ForMember(dest => dest.ThemeVersion, mo => mo.MapFrom(p => p.Version));

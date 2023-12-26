@@ -2,6 +2,6 @@
 {
     public interface IThemeList
     {
-        IList<ThemeConfiguration> ThemeConfigurations { get; }
+        IList<Theme> ThemeConfigurations { get; }
     }
 }
