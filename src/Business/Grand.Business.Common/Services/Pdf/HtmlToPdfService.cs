@@ -43,8 +43,7 @@ namespace Grand.Business.Common.Services.Pdf
 
             var html = await _viewRenderService.RenderToStringAsync<(IList<Order>, string)>(OrderTemplate,
                 new(orders, vendorId));
-            _logger.LogInformation(html);
-            _logger.LogInformation("html", html);
+            _logger.LogInformation("HTML Content: {HtmlContent}", html);
             TextReader sr = new StringReader(html);
             using var doc = Scryber.Components.Document.ParseDocument(sr, Scryber.ParseSourceType.DynamicContent);
             doc.SaveAsPDF(stream);
