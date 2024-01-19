@@ -13,16 +13,15 @@
 @inject PdfSettings _pdfSettings
 @inject ITranslationService _translationService
 @inject IPaymentService _paymentService
-@inject ICurrencyService _currencyService
 @inject IGiftVoucherService _giftVoucherService
 @{
     var logoPicture = await _pictureService.GetPictureById(_pdfSettings.LogoPictureId);
     var logoExists = logoPicture != null;
     var limitbyVendor = !string.IsNullOrEmpty(Model.Item2);
 }
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title></title>
+    <title>Test</title>
     <style>
         .summary {
             padding-top:20px;
@@ -179,137 +178,6 @@
         <div class="summary">
             @(_translationService.GetResource("PDFInvoice.Product(s)", order.CustomerLanguageId))
         </div>
-        <table class="Table">
-            <tr>
-                <td class="Header leftalign" colspan="2">@(_translationService.GetResource("PDFInvoice.ProductName", order.CustomerLanguageId))</td>
-                <td class="Header">@(_translationService.GetResource("PDFInvoice.ProductPrice", order.CustomerLanguageId))</td>
-                <td class="Header">@(_translationService.GetResource("PDFInvoice.ProductQuantity", order.CustomerLanguageId))</td>
-                <td class="Header">@(_translationService.GetResource("PDFInvoice.ProductTotal", order.CustomerLanguageId))</td>
-            </tr>
-            @foreach (var item in order.OrderItems.Where(x => x.VendorId == Model.Item2 || !limitbyVendor).ToList())
-            {
-                <tr>
-                    <td class="autoWidth leftalign" colspan="2">
-                        @((await _productService.GetProductByIdIncludeArch(item.ProductId)).Name)
-                        @if (!string.IsNullOrEmpty(item.AttributeDescription))
-                        {
-                            <br/>
-                            @(Html.Raw(item.AttributeDescription))
-                        }
-                    </td>
-                    <td>
-                        @if (priceIncludesTax)
-                        {
-                            @item.UnitPriceInclTax.ToString("N2")
-                        }
-                        else
-                        {
-                            @item.UnitPriceExclTax.ToString("N2")
-                        }
-                    </td>
-                    <td>@item.Quantity</td>
-                    <td class="bold">
-                        @if (priceIncludesTax)
-                        {
-                            @item.PriceInclTax.ToString("N2")
-                        }
-                        else
-                        {
-                            @item.PriceExclTax.ToString("N2")
-                        }
-                    </td>
-                </tr>
-            }
-        </table>
-        @if (!limitbyVendor)
-        {
-            <div class="summary">
-                @if (!string.IsNullOrEmpty(order.CheckoutAttributeDescription))
-                {
-                    @(Html.Raw(order.CheckoutAttributeDescription))
-                }
-                <div style="float: right">
-
-                    @(_translationService.GetResource("PDFInvoice.Sub-Total", order.CustomerLanguageId))
-                    @if (priceIncludesTax)
-                    {
-                        @order.OrderSubtotalInclTax.ToString("N2")
-                    }
-                    else
-                    {
-                        @order.OrderSubtotalExclTax.ToString("N2")
-                    }
-                    @order.CustomerCurrencyCode <br/>
-                    @if (order.OrderSubTotalDiscountInclTax > 0 || order.OrderSubTotalDiscountExclTax > 0)
-                    {
-                        @(_translationService.GetResource("PDFInvoice.Discount", order.CustomerLanguageId)) @if (priceIncludesTax)
-                                                                                                            {
-                                                                                                                @order.OrderSubTotalDiscountInclTax.ToString("N2")
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
-                                                                                                                @order.OrderSubTotalDiscountExclTax.ToString("N2")
-                                                                                                            }
-                        @order.CustomerCurrencyCode
-                    }
-                    @if (order.PaymentMethodAdditionalFeeInclTax > 0 || order.PaymentMethodAdditionalFeeExclTax > 0)
-                    {
-                        @(_translationService.GetResource("PDFInvoice.PaymentmethodAdditionalFee", order.CustomerLanguageId)) @if (priceIncludesTax)
-                                                                                                                              {
-                                                                                                                                  @order.PaymentMethodAdditionalFeeInclTax.ToString("N2")
-                                                                                                                              }
-                                                                                                                              else
-                                                                                                                              {
-                                                                                                                                  @order.PaymentMethodAdditionalFeeExclTax.ToString("N2")
-                                                                                                                              }
-                        @order.CustomerCurrencyCode<br/>
-                    }
-                    @(_translationService.GetResource("PDFInvoice.Shipping", order.CustomerLanguageId))
-                    @if (priceIncludesTax)
-                    {
-                        @order.OrderShippingInclTax.ToString("N2")
-                    }
-                    else
-                    {
-                        @order.OrderShippingExclTax.ToString("N2")
-                    }
-                    @order.CustomerCurrencyCode<br/>
-                    @if (order.OrderDiscount > 0)
-                    {
-                        @(_translationService.GetResource("PDFInvoice.Discount", order.CustomerLanguageId))
-                        @order.OrderDiscount.ToString("N2")
-                        @order.CustomerCurrencyCode<br/>
-                    }
-                    @foreach (var gcuh in await _giftVoucherService.GetAllGiftVoucherUsageHistory(order.Id))
-                    {
-                        if (gcuh.UsedValue > 0)
-                        {
-                            var giftvoucher = await _giftVoucherService.GetGiftVoucherById(gcuh.GiftVoucherId);
-                            @(string.Format(_translationService.GetResource("PDFInvoice.GiftVoucherInfo", order.CustomerLanguageId), giftvoucher.Code))
-                            @gcuh.UsedValue<br/>
-                        }
-                    }
-                    @if (order.OrderTax > 0)
-                    {
-                        @(_translationService.GetResource("PDFInvoice.Tax", order.CustomerLanguageId))
-                        @order.OrderTax.ToString("N2")
-                        @order.CustomerCurrencyCode<br/>
-                    }
-                    <b>@(_translationService.GetResource("PDFInvoice.OrderTotal", order.CustomerLanguageId)) @order.OrderTotal.ToString("N2") @order.CustomerCurrencyCode<br/></b>
-
-                </div>
-            </div>
-        }
-        if (!string.IsNullOrEmpty(_pdfSettings.InvoiceFooterText))
-        {
-            <footer class="footer">
-                @Html.Raw(_pdfSettings.InvoiceFooterText)
-            </footer>
-        }
-        if (Model.Item1.Count - 1 > i)
-        {
-            <div style="display:block; clear:both; page-break-after:always;"></div>
-        }
         i++;
     }
 </main>

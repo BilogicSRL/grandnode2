@@ -46,25 +46,13 @@ namespace Grand.Business.Common.Services.Pdf
 
             var html = await _viewRenderService.RenderToStringAsync<(IList<Order>, string)>(OrderTemplate,
                 new(orders, vendorId));
-            try
-            {
+            _logger.LogInformation("HTML Content: {HtmlContent}", html);
                 _logger.LogInformation("TEST Content: {HtmlContent}", "test");
                 //_logger.LogInformation("HTML Content: {HtmlContent}", html);
                 TextReader sr = new StringReader(html);
                 using var doc = Scryber.Components.Document.ParseDocument(sr, Scryber.ParseSourceType.DynamicContent);
                 doc.SaveAsPDF(stream);
-
-            }
-            catch (Exception e)
-            {
-                _logger.LogInformation("TEST2 Content: {HtmlContent}", "test");
-            }
-            _logger.LogInformation("HTML Content: {HtmlContent}", html);
             
-            {
-                _httpContextAccessor.HttpContext.Response.ContentType = "text/html";
-                _httpContextAccessor.HttpContext.Response.WriteAsync(html);
-            }
         }
 
         public async Task<string> PrintOrderToPdf(Order order, string languageId, string vendorId = "")
