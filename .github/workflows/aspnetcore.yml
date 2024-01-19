@@ -1,7 +1,8 @@
 name: ASP.NET Core CI
 
-on: [push]
-
+on:
+  push:
+    branches: [ "test" ]
 jobs:
   build:
 
