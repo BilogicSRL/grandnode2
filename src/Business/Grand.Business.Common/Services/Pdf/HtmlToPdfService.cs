@@ -5,6 +5,7 @@ using Grand.Domain.Media;
 using Grand.Domain.Orders;
 using Grand.Domain.Shipping;
 using Grand.SharedKernel.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Grand.Business.Common.Services.Pdf
 {
@@ -20,14 +21,15 @@ namespace Grand.Business.Common.Services.Pdf
         private readonly ILanguageService _languageService;
         private readonly IRepository<Download> _downloadRepository;
         private readonly IStoreFilesContext _storeFilesContext;
-
+        private readonly ILogger<HtmlToPdfService> _logger;
         public HtmlToPdfService(IViewRenderService viewRenderService, IRepository<Download> downloadRepository,
-            ILanguageService languageService, IStoreFilesContext storeFilesContext)
+            ILanguageService languageService, IStoreFilesContext storeFilesContext, ILogger<HtmlToPdfService> logger)
         {
             _viewRenderService = viewRenderService;
             _languageService = languageService;
             _downloadRepository = downloadRepository;
             _storeFilesContext = storeFilesContext;
+            _logger = logger;
         }
 
         public async Task PrintOrdersToPdf(Stream stream, IList<Order> orders, string languageId = "",
@@ -41,6 +43,8 @@ namespace Grand.Business.Common.Services.Pdf
 
             var html = await _viewRenderService.RenderToStringAsync<(IList<Order>, string)>(OrderTemplate,
                 new(orders, vendorId));
+            _logger.LogInformation(html);
+            _logger.LogInformation("html", html);
             TextReader sr = new StringReader(html);
             using var doc = Scryber.Components.Document.ParseDocument(sr, Scryber.ParseSourceType.DynamicContent);
             doc.SaveAsPDF(stream);
