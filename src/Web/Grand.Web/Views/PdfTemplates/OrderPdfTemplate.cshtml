@@ -19,7 +19,7 @@
     var logoExists = logoPicture != null;
     var limitbyVendor = !string.IsNullOrEmpty(Model.Item2);
 }
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Test</title>
     <style>
@@ -32,17 +32,12 @@
             bottom: 0;
             width: 100%;
         }
-
-
-        /* https://www.w3schools.com/html/html_table_borders.asp */
       table.CodeTable {
               width: 100%;  
       }
       .CodeTable .line {border-bottom:1px solid #EEE; border-top: 1px solid #EEE; border-left: 1px solid #FFFFFF; border-right: 1px solid #FFFFFF;}
       table.CodeTable th,
       table.CodeTable td {
-        /* width: 100%; */
-        /*border: 0px solid black;*/
         border: none;
         border-collapse: collapse;
       }
@@ -58,9 +53,7 @@
       table.Table,
       table.Table th,
       table.Table td {
-        /*white-space: nowrap;*/
         text-align: left;
-        /* border: 1px solid black; */
         border-collapse: collapse;
       }
       table.Table th,
