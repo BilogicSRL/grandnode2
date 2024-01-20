@@ -8,6 +8,7 @@ using Grand.SharedKernel.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Scryber;
+using System.Security;
 
 namespace Grand.Business.Common.Services.Pdf
 {
@@ -47,10 +48,11 @@ namespace Grand.Business.Common.Services.Pdf
 
             var html = await _viewRenderService.RenderToStringAsync<(IList<Order>, string)>(OrderTemplate,
                 new(orders, vendorId));
+            var x = SecurityElement.Escape(html);
             //_logger.LogInformation("HTML Content: {HtmlContent}", html);
                 _logger.LogInformation("TEST Content: {HtmlContent}", "test");
                 //_logger.LogInformation("HTML Content: {HtmlContent}", html);
-                TextReader sr = new StringReader(html);
+                TextReader sr = new StringReader(x);
                 using var doc = Scryber.Components.Document.ParseDocument(sr, ParseSourceType.DynamicContent);
                 doc.SaveAsPDF(stream);
             
