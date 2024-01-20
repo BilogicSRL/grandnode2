@@ -7,6 +7,7 @@ using Grand.Domain.Shipping;
 using Grand.SharedKernel.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Scryber;
 
 namespace Grand.Business.Common.Services.Pdf
 {
@@ -50,7 +51,7 @@ namespace Grand.Business.Common.Services.Pdf
                 _logger.LogInformation("TEST Content: {HtmlContent}", "test");
                 //_logger.LogInformation("HTML Content: {HtmlContent}", html);
                 TextReader sr = new StringReader(html);
-                using var doc = Scryber.Components.Document.ParseDocument(sr);
+                using var doc = Scryber.Components.Document.ParseDocument(sr, ParseSourceType.DynamicContent);
                 doc.SaveAsPDF(stream);
             
         }
